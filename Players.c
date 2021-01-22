@@ -13,14 +13,14 @@ typedef struct
     char nickname[12];
 }player;
 
-player players[2];     // Creates an array where the 2 players in the game will be stored and manipulated
+player players[2];     // Cria um array onde os 2 Players ficarão guardados e manipulados.
 
   
   //------------------------  FUNCTION TO SET NICKNAMES   ---------------------------//
 
 void createPlayers(){
-                            //CYCLE TO REQUEST FOR PLAYER'S NICKNAME AND STORE IT IN """THE PLAYERSLIST"""
-     do                     //GRANTS PLAYERS DON'T PICK THE SAME NICKNAME
+                            // Ciclo para pedir aos Jogadores pelo nome e guardar em """THE PLAYERSLIST"""
+     do                     //Jogadores não podem usar o mesmo nome.
     {
         for (int i = 0; i < 2; i++)
         {
@@ -35,7 +35,7 @@ void createPlayers(){
         }
         if (!strcmp(players[0].nickname , players[1].nickname))
         {
-            printf("Players Nicknames can't be the same. Please choose new ones! \n");
+            printf("Os Nomes são iguais. por favor escolher ooutro Nome! \n");
         }
               
     } while (!strcmp(players[0].nickname , players[1].nickname));      
@@ -62,15 +62,15 @@ void setWhite(player players[2]){
         }   
         printf("\n ");
         printf(players[0].nickname);
-        printf(" is White and will start the game! \n \n ");
+        printf(" é branco e vai jogar primeiro! \n \n ");
         printf(players[1].nickname);
-        printf(" is Black and will go second! \n \n");       
+        printf(" é preto e vai jogar em segundo! \n \n");       
     }
     else{ //ELSE ALL REMAINS THE SAME AND INITIAL PLAYER[0] STARTS
         printf(players[0].nickname);
-        printf(" is Whites and will start the game! \n \n ");
+        printf(" é branco e vai jogar primeiro! \n \n ");
         printf(players[1].nickname);
-        printf(" is Blacks and will go second! \n \n");  
+        printf(" é preto e vai jogar em segundo! \n \n");  
     }
 }
 
