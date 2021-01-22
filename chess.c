@@ -8,11 +8,11 @@
 #include <conio.h>
 #include <math.h>
 
-piece pieces1[16];//brancos
-piece pieces2[16];//pretos
+peca pecas1[16];//brancos
+peca pecas2[16];//pretos
 
-player players[2];
-bool whiteTurn = true;
+player jogadores[2];
+bool turnoBranco = true;
 bool winW,winB;
 
 int random;
@@ -25,14 +25,14 @@ void writeCoordinatesOfPieces(FILE *savedData)
 {
     for (int i = 0; i < 16; i++)
     {
-        fprintf(&*savedData,"%c %d %c\n",pieces1[i].costume,pieces1[i].posX,pieces1[i].posY);
+        fprintf(&*savedData,"%c %d %c\n",pecas1[i].costume,pecas1[i].posX,pecas1[i].posY);
         // fprintf("%c %d %c",pieces1[i].costume,pieces1[i].posX,pieces1[i].posY);
         // fprintf("\n");
     }
     fprintf(&*savedData,"\n");
     for (int i = 0; i < 16; i++)
     {
-        fprintf(&*savedData,"%c %d %c\n",pieces2[i].costume,pieces2[i].posX,pieces2[i].posY);
+        fprintf(&*savedData,"%c %d %c\n",pecas2[i].costume,pecas2[i].posX,pecas2[i].posY);
         // fprintf("%c %d %c",pieces2[i].costume,pieces2[i].posX,pieces2[i].posY);
         // fprintf("\n");
     }
@@ -41,7 +41,7 @@ void writeCoordinatesOfPieces(FILE *savedData)
 
 void writePlayerTurn(FILE *savedData)
 {
-    fprintf(&*savedData,"%d",whiteTurn);
+    fprintf(&*savedData,"%d",turnoBranco);
 }
 
 
@@ -53,48 +53,48 @@ void createPlayers(){
         {
             do{
                 printf("Jogador %d, digite seu nome:  ",(i + 1));
-                gets(players[i].nickname);     
+                gets(jogadores[i].nickname);     
 
-                if(strlen(players[i].nickname) > 12){
+                if(strlen(jogadores[i].nickname) > 12){
                     printf("Nome muito longo. \n");
                 }
-            }while(strlen(players[i].nickname) > 12);
+            }while(strlen(jogadores[i].nickname) > 12);
         }
-        if (!strcmp(players[0].nickname , players[1].nickname))
+        if (!strcmp(jogadores[0].nickname , jogadores[1].nickname))
         {
             printf("Nomes iguais, escolham outro. \n");
         }
               
-    } while (!strcmp(players[0].nickname , players[1].nickname));      
+    } while (!strcmp(jogadores[0].nickname , jogadores[1].nickname));      
 }
 
 //--------------------   FUNCTION TO INFORM THE PLAYERS OF WHO PLAYS FIRST/ IS WHITE  ------------------//
 void checkGame()
 {    
-    bool foundKingW;
-    bool foundKingB;
-    for (int i = 0; i < sizeof pieces1/sizeof pieces1[0]; i++)
+    bool encontrouReiB;
+    bool encontrouReiP;
+    for (int i = 0; i < sizeof pecas1/sizeof pecas1[0]; i++)
     {
-        if(pieces1[i].costume == 'K')
+        if(pecas1[i].costume == 'K')
         {
-            foundKingW = true;
+            encontrouReiB = true;
             break;
         }
     }
-    for (int i = 0; i < sizeof pieces2/sizeof pieces2[0]; i++)
+    for (int i = 0; i < sizeof pecas2/sizeof pecas2[0]; i++)
     {
-        if(pieces2[i].costume == 'k')
+        if(pecas2[i].costume == 'k')
         {
-            foundKingB = true;
+            encontrouReiP = true;
         }
     }
     
-    if(foundKingW && !foundKingB)
+    if(encontrouReiB && !encontrouReiP)
     {
         winB = false;
         winW = true;
     }
-    else if(!foundKingW && foundKingB)
+    else if(!encontrouReiB && encontrouReiP)
     {
         winW = false;
         winB = true;
@@ -104,63 +104,63 @@ void checkGame()
 void setWhite(){
 
     srand(time(NULL));
-    int random = rand();       //Generates random value -> If pair Player[0] stays player 0 ----> ELSE Player[0] becomes player[1]
+    int random = rand();       //Gera valores aleaotórios -> If pair Player[0] stays player 0 ----> ELSE Player[0] becomes player[1]
     player temp[2];            //USER DOESN'T SEE THIS CHANGE HAPPENING, IT JUST ORGANIZES PLAYER ORDER
 
     if(random % 2 == 1){
        
        // player[0] becomes player[1] and vice versa -----> player[0] always starts, but which one it is is random
-        temp[0] = players[1];
-        temp[1] = players[0];
+        temp[0] = jogadores[1];
+        temp[1] = jogadores[0];
         for (int i = 0; i < 2; i++)
         {
-            players[i] = temp[i];
+            jogadores[i] = temp[i];
         }   
         printf("\n ");
-        printf(players[0].nickname);
-        printf(" is White and will start the game! \n \n ");
-        printf(players[1].nickname);
-        printf(" is Black and will go second! \n \n");       
+        printf(jogadores[0].nickname);
+        printf("  é o Branco e irá em primeiro! \n \n ");
+        printf(jogadores[1].nickname);
+        printf(" é Preto e irá em segundo! \n \n");       
     }
     else{ //ELSE ALL REMAINS THE SAME AND INITIAL PLAYER[0] STARTS
-        printf(players[0].nickname);
-        printf(" is Whites and will start the game! \n \n ");
-        printf(players[1].nickname);
-        printf(" is Blacks and will go second! \n \n");  
+        printf(jogadores[0].nickname);
+        printf("  é o Branco e irá em primeiro \n \n ");
+        printf(jogadores[1].nickname);
+        printf(" é Preto e irá em segundo! \n \n");  
     }
 }
 
-void createTable()
+void criarTabuleiro()
 {
     srand(time(0));
     random = rand()%2;
-    //creates a random table of black and white chess pieces represented 
-    //by lower case and upper case characters respectively on the 8x8 board
+    //gera um tabuleiro aleatorio de peças brancas e pretas.
+    //com letras maísuculas e minúsculas, respectivamente 
     // piece pieces1[16];
     // piece pieces2[16];
-    char costumes[9] = {'p','r','n','b','q','k','b','n','r'};
+    char pecas[9] = {'p','r','n','b','q','k','b','n','r'};
     if(random == 0)
     {
         for (int i = 0, b = 'A'; i < 16; i++,b++)
         {
             if(i<=7)
             {
-                pieces1[i].costume = toupper(costumes[i+1]);
-                pieces1[i].posY = b; 
-                pieces1[i].posX = 1;
+                pecas1[i].costume = toupper(pecas[i+1]);
+                pecas1[i].posY = b; 
+                pecas1[i].posX = 1;
 
-                pieces2[i].costume = costumes[i+1];
-                pieces2[i].posY = b; 
-                pieces2[i].posX = 8;
+                pecas2[i].costume = pecas[i+1];
+                pecas2[i].posY = b; 
+                pecas2[i].posX = 8;
             }else
             {
-                pieces1[i].costume = toupper(costumes[0]);
-                pieces1[i].posY = b-8;
-                pieces1[i].posX = 2;
+                pecas1[i].costume = toupper(pecas[0]);
+                pecas1[i].posY = b-8;
+                pecas1[i].posX = 2;
 
-                pieces2[i].costume = costumes[0];
-                pieces2[i].posY = b-8; 
-                pieces2[i].posX = 7;
+                pecas2[i].costume = pecas[0];
+                pecas2[i].posY = b-8; 
+                pecas2[i].posX = 7;
             }        
         }
     }else
@@ -169,22 +169,22 @@ void createTable()
         {
             if(i<=7)
             {
-                pieces1[i].costume = toupper(costumes[i+1]);
-                pieces1[i].posY = b; 
-                pieces1[i].posX = 8;
+                pecas1[i].costume = toupper(pecas[i+1]);
+                pecas1[i].posY = b; 
+                pecas1[i].posX = 8;
 
-                pieces2[i].costume = costumes[i+1];
-                pieces2[i].posY = b; 
-                pieces2[i].posX = 1;
+                pecas2[i].costume = pecas[i+1];
+                pecas2[i].posY = b; 
+                pecas2[i].posX = 1;
             }else
             {
-                pieces1[i].costume = toupper(costumes[0]);
-                pieces1[i].posY = b-8;
-                pieces1[i].posX = 7;
+                pecas1[i].costume = toupper(pecas[0]);
+                pecas1[i].posY = b-8;
+                pecas1[i].posX = 7;
 
-                pieces2[i].costume = costumes[0];
-                pieces2[i].posY = b-8; 
-                pieces2[i].posX = 2;
+                pecas2[i].costume = pecas[0];
+                pecas2[i].posY = b-8; 
+                pecas2[i].posX = 2;
             }        
         }
     }
@@ -198,23 +198,23 @@ void createTable()
     if(random == 0)
     {
         //upper case top        
-        for (int l = 0; l < 8; l++)//creates lines
+        for (int l = 0; l < 8; l++)//cria as linhas
         {
             printf("%d ", l+1);
-            for (int c = 0; c < 8; c++)//create colums
+            for (int c = 0; c < 8; c++)//cria as colunas
             {
                 if(l == 0)
                 {
-                    printf("[%c]",pieces1[c].costume);
+                    printf("[%c]",pecas1[c].costume);
                 }else if(l == 1)
                 {
-                    printf("[%c]",pieces1[c+8].costume);
+                    printf("[%c]",pecas1[c+8].costume);
                 }else if(l == 6)
                 {
-                    printf("[%c]",pieces2[c+8].costume);
+                    printf("[%c]",pecas2[c+8].costume);
                 }else if(l == 7)
                 {
-                    printf("[%c]",pieces2[c].costume);
+                    printf("[%c]",pecas2[c].costume);
                 }else
                 {
                     printf("[ ]");
@@ -224,24 +224,24 @@ void createTable()
         }
     }else
     {
-        //upper case down
-        for (int l = 0; l < 8; l++)//creates lines
+
+        for (int l = 0; l < 8; l++)//cria linhas
         {
             printf("%d ", l+1);
-            for (int c = 0; c < 8; c++)//create colums
+            for (int c = 0; c < 8; c++)//cria colunas
             {
                 if(l == 0)
                 {
-                    printf("[%c]",pieces2[c].costume);
+                    printf("[%c]",pecas2[c].costume);
                 }else if(l == 1)
                 {
-                    printf("[%c]",pieces2[c+8].costume);
+                    printf("[%c]",pecas2[c+8].costume);
                 }else if(l == 6)
                 {
-                    printf("[%c]",pieces1[c+8].costume);
+                    printf("[%c]",pecas1[c+8].costume);
                 }else if(l == 7)
                 {
-                    printf("[%c]",pieces1[c].costume);
+                    printf("[%c]",pecas1[c].costume);
                 }else
                 {
                     printf("[ ]");
@@ -254,7 +254,7 @@ void createTable()
 
 void reCreateTable()
 {
-    bool foundPiece;
+    bool encontrarPeca;
     system("cls");
     printf("   A");
     for (int i = 'B'; i <= 'H'; i++)
@@ -270,23 +270,23 @@ void reCreateTable()
         {
             for(int p = 0; p < 16; p++)
             {
-                if(pieces1[p].posX == l && pieces1[p].posY == c)
+                if(pecas1[p].posX == l && pecas1[p].posY == c)
                 {
-                    printf("[%c]",pieces1[p].costume);
-                    foundPiece = true;
+                    printf("[%c]",pecas1[p].costume);
+                    encontrarPeca = true;
                     break;
-                }else if(pieces2[p].posX == l && pieces2[p].posY == c)
+                }else if(pecas2[p].posX == l && pecas2[p].posY == c)
                 {
-                    printf("[%c]",pieces2[p].costume);
-                    foundPiece = true;
+                    printf("[%c]",pecas2[p].costume);
+                    encontrarPeca = true;
                     break;                    
                 }              
             }
-            if(foundPiece == false)
+            if(encontrarPeca == false)
             {
                 printf("[ ]");
             }
-            foundPiece = false;                                    
+            encontrarPeca = false;                                    
         }
         printf("\n");
     }    
@@ -297,356 +297,356 @@ void movePiece()
     int index = 0;
     int posX = 0;//select piece line
     char posY = 0;//select piece column
-    char selectedPieceCostume = ' ';
-    char answer = 0;
-    piece selectedPiece;
-    bool choose = false;
+    char pecaEscolhida = ' ';
+    char resposta = 0;
+    peca pecaSelecionada;
+    bool escolha = false;
     //select piece
     //receive coordinates from the table and verify if exists in the table
-    if(whiteTurn == true)
+    if(turnoBranco == true)
     {
-        printf("<< %s turn >>\n",players[0].nickname);
+        printf("<< %s turn >>\n",jogadores[0].nickname);
     }else
     {
-        printf("<< %s turn >>\n",players[1].nickname);
+        printf("<< %s turn >>\n",jogadores[1].nickname);
     }
         
-    while(selectedPieceCostume == ' ' && choose == false)
+    while(pecaEscolhida == ' ' && escolha == false)
     {
         //choose a line form the table
         do
         {
-            printf("Select piece\n");
-            printf("Line of the Piece: ");
+            printf("Selecionas peça\n");
+            printf("linha da peça: ");
             scanf("%d",&posX);
             if(posX <= 0 || posX > 8)//if the choice is outside of the table, teel the player that he is out of bounds
             {
-                printf("Outside of the table\nWrite a valid number from the table!\n");
+                printf("Fora do tabuleiro\nEscreva um número válido dentro do tabuleiro!\n");
             }
         }while(posX <= 0 || posX > 8);
 
         do
         {
-            printf("Column of the Piece: ");
+            printf("Coluna da peça: ");
             scanf(" %c",&posY);
             posY = toupper(posY);
             if(posY < 'A' || posY > 'H')//if the choice is outside of the table, teel the player that he is out of bounds
             {
-                printf("Outside of the table\nWrite a valid Column from the table!\n");
+                printf("Fora do tabuleiro\nEscreva uma coluna válida dentro do tabuleiro!\n\n");
             }
         }while(posY < 'A' || posY > 'H');
         
         for (int i = 0; i < 16; i++)
         {
-            if(pieces1[i].posX == posX && pieces1[i].posY == posY)
+            if(pecas1[i].posX == posX && pecas1[i].posY == posY)
             {
-                selectedPieceCostume = pieces1[i].costume;
+                pecaEscolhida = pecas1[i].costume;
                 // selectedPiece.costume = pieces1[i].costume;
                 // selectedPiece.posX = posX;
                 // selectedPiece.posY = posY;
                 break;
-            }else if(pieces2[i].posX == posX && pieces2[i].posY == posY)
+            }else if(pecas2[i].posX == posX && pecas2[i].posY == posY)
             {
-                selectedPieceCostume = pieces2[i].costume;
+                pecaEscolhida = pecas2[i].costume;
                 // selectedPiece.costume = pieces2[i].costume;
                 // selectedPiece.posX = posX;
                 // selectedPiece.posY = posY;
                 break;
             }
         }
-        if(selectedPieceCostume == ' ')//if player selects a blank space
+        if(pecaEscolhida == ' ')//if player selects a blank space
         {
-            printf("Blank space, select a valid piece");
-            selectedPieceCostume = ' ';
+            printf("Espaço em branco, escolha um espaço válido");
+            pecaEscolhida = ' ';
             posX = 0;
             posY=0;
             continue;
-        }else if(whiteTurn == true && selectedPieceCostume != toupper(selectedPieceCostume))//if player selects a piece form the opponent
+        }else if(turnoBranco == true && pecaEscolhida != toupper(pecaEscolhida))//if player selects a piece form the opponent
         {
-            printf("Opponent piece selected, choose one of your own!\n");
-            selectedPieceCostume = ' ';
+            printf("Peça do oponete escolhida! Escolha uma peça sua!\n");
+            pecaEscolhida = ' ';
             posX = 0;
             posY=0;
             continue;
-        }else if(whiteTurn == false && selectedPieceCostume == toupper(selectedPieceCostume))//if player selects a piece form the opponent
+        }else if(turnoBranco == false && pecaEscolhida == toupper(pecaEscolhida))//if player selects a piece form the opponent
         {
-            printf("Opponent piece selected, choose one of your own!\n");
-            selectedPieceCostume = ' ';
+            printf("Peça do oponete escolhida! Escolha uma peça sua!\n");
+            pecaEscolhida = ' ';
             posX = 0;
             posY=0;
             continue;
         }
         
         do{
-            printf("Selected Piece %c(%d,%c)\nDo you wish to switch(Y/N)?",selectedPieceCostume,posX,posY);
-            scanf(" %c",&answer);
-            answer = toupper(answer);
-            if(answer == 'Y')
+            printf("Selecionou a peça %c(%d,%c)\nvocê quer trocar?(Y/N)?",pecaEscolhida,posX,posY);
+            scanf(" %c",&resposta);
+            resposta = toupper(resposta);
+            if(resposta == 'Y')
             {
-                choose = false;
-                selectedPieceCostume = ' ';
+                escolha = false;
+                pecaEscolhida = ' ';
                 posX = 0;
                 posY = 0;
                 continue;
-            }else if(answer == 'N')
+            }else if(resposta == 'N')
             {
-                choose = true;
-                selectedPiece.costume = selectedPieceCostume;
-                selectedPiece.posX = posX;
-                selectedPiece.posY = posY;                
+                escolha = true;
+                pecaSelecionada.costume = pecaEscolhida;
+                pecaSelecionada.posX = posX;
+                pecaSelecionada.posY = posY;                
             }
-        }while(answer != 'Y' && answer != 'N');
+        }while(resposta != 'Y' && resposta != 'N');
 
     }
     for (int i = 0; i < 16; i++)
     {
-        if(whiteTurn == true)
+        if(turnoBranco == true)
         {
-            if(selectedPiece.costume == pieces1[i].costume && selectedPiece.posX == pieces1[i].posX && selectedPiece.posY == pieces1[i].posY)
+            if(pecaSelecionada.costume == pecas1[i].costume && pecaSelecionada.posX == pecas1[i].posX && pecaSelecionada.posY == pecas1[i].posY)
             {
                 index = i;  
                 break;
             }
-        }else if(whiteTurn == false)
+        }else if(turnoBranco == false)
         {
-            if(selectedPiece.costume == pieces2[i].costume && selectedPiece.posX == pieces2[i].posX && selectedPiece.posY == pieces2[i].posY)
+            if(pecaSelecionada.costume == pecas2[i].costume && pecaSelecionada.posX == pecas2[i].posX && pecaSelecionada.posY == pecas2[i].posY)
             {
                 index = i;    
                 break;
             }
         }                
     }
-    printf("Selected Piece Index(%d) %c(%d,%c)\n",index,selectedPiece.costume,selectedPiece.posX,selectedPiece.posY);
+    printf("peça selecionada é (%d) %c(%d,%c)\n",index,pecaSelecionada.costume,pecaSelecionada.posX,pecaSelecionada.posY);
     
     //show possible coordinates
     posX = 0;//select new line to move
     posY = 0;//select new column to move
     
-        if(selectedPiece.costume == 'p' || selectedPiece.costume == 'P')//movement of pawn
+        if(pecaSelecionada.costume == 'p' || pecaSelecionada.costume == 'P')//movement of pawn
         {
             //-> move forawrd only once
             //write available spaces
-            int availablePositionsAttack[4] ={0};
-            int availablePositions[2] = {0};
-            int enemyIndex1 = 0,enemyIndex2 = 0;
-            if(random == 0 && whiteTurn == true)
+            int posicoesAtaqueDisponivel[4] ={0};
+            int posicoesDisponiveis[2] = {0};
+            int indicadorInimigo1 = 0,indicadorInimigo2 = 0;
+            if(random == 0 && turnoBranco == true)
             {
-                availablePositions[0] = selectedPiece.posX + 1;
-                availablePositions[1] = selectedPiece.posY;
-                if(selectedPiece.posY != 'A' && selectedPiece.posY !='H')
+                posicoesDisponiveis[0] = pecaSelecionada.posX + 1;
+                posicoesDisponiveis[1] = pecaSelecionada.posY;
+                if(pecaSelecionada.posY != 'A' && pecaSelecionada.posY !='H')
                 {
-                    availablePositionsAttack[0] = selectedPiece.posX + 1;
-                    availablePositionsAttack[1] = selectedPiece.posY + 1;
-                    availablePositionsAttack[2] = selectedPiece.posX + 1;
-                    availablePositionsAttack[3] = selectedPiece.posY - 1;
+                    posicoesAtaqueDisponivel[0] = pecaSelecionada.posX + 1;
+                    posicoesAtaqueDisponivel[1] = pecaSelecionada.posY + 1;
+                    posicoesAtaqueDisponivel[2] = pecaSelecionada.posX + 1;
+                    posicoesAtaqueDisponivel[3] = pecaSelecionada.posY - 1;
                 }
-                else if(selectedPiece.posY == 'A')
+                else if(pecaSelecionada.posY == 'A')
                 {
-                    availablePositionsAttack[0] = selectedPiece.posX + 1;
-                    availablePositionsAttack[1] = selectedPiece.posY + 1;
-                    availablePositionsAttack[2] = selectedPiece.posX + 1;
-                    availablePositionsAttack[3] = selectedPiece.posY + 1;
+                    posicoesAtaqueDisponivel[0] = pecaSelecionada.posX + 1;
+                    posicoesAtaqueDisponivel[1] = pecaSelecionada.posY + 1;
+                    posicoesAtaqueDisponivel[2] = pecaSelecionada.posX + 1;
+                    posicoesAtaqueDisponivel[3] = pecaSelecionada.posY + 1;
                 }
-                else if(selectedPiece.posY == 'H')
+                else if(pecaSelecionada.posY == 'H')
                 {
-                    availablePositionsAttack[0] = selectedPiece.posX + 1;
-                    availablePositionsAttack[1] = selectedPiece.posY - 1;
-                    availablePositionsAttack[2] = selectedPiece.posX + 1;
-                    availablePositionsAttack[3] = selectedPiece.posY - 1;
+                    posicoesAtaqueDisponivel[0] = pecaSelecionada.posX + 1;
+                    posicoesAtaqueDisponivel[1] = pecaSelecionada.posY - 1;
+                    posicoesAtaqueDisponivel[2] = pecaSelecionada.posX + 1;
+                    posicoesAtaqueDisponivel[3] = pecaSelecionada.posY - 1;
                 }
             }
-            else if(random == 0 && whiteTurn == false)
+            else if(random == 0 && turnoBranco == false)
             {
-                availablePositions[0] = selectedPiece.posX - 1;
-                availablePositions[1] = selectedPiece.posY;
-                if(selectedPiece.posY != 'A' && selectedPiece.posY !='H')
+                posicoesDisponiveis[0] = pecaSelecionada.posX - 1;
+                posicoesDisponiveis[1] = pecaSelecionada.posY;
+                if(pecaSelecionada.posY != 'A' && pecaSelecionada.posY !='H')
                 {
-                    availablePositionsAttack[0] = selectedPiece.posX - 1;
-                    availablePositionsAttack[1] = selectedPiece.posY + 1;
-                    availablePositionsAttack[2] = selectedPiece.posX - 1;
-                    availablePositionsAttack[3] = selectedPiece.posY - 1;
+                    posicoesAtaqueDisponivel[0] = pecaSelecionada.posX - 1;
+                    posicoesAtaqueDisponivel[1] = pecaSelecionada.posY + 1;
+                    posicoesAtaqueDisponivel[2] = pecaSelecionada.posX - 1;
+                    posicoesAtaqueDisponivel[3] = pecaSelecionada.posY - 1;
                 }
-                else if(selectedPiece.posY == 'A')
+                else if(pecaSelecionada.posY == 'A')
                 {
-                    availablePositionsAttack[0] = selectedPiece.posX - 1;
-                    availablePositionsAttack[1] = selectedPiece.posY + 1;
-                    availablePositionsAttack[2] = selectedPiece.posX - 1;
-                    availablePositionsAttack[3] = selectedPiece.posY + 1;
+                    posicoesAtaqueDisponivel[0] = pecaSelecionada.posX - 1;
+                    posicoesAtaqueDisponivel[1] = pecaSelecionada.posY + 1;
+                    posicoesAtaqueDisponivel[2] = pecaSelecionada.posX - 1;
+                    posicoesAtaqueDisponivel[3] = pecaSelecionada.posY + 1;
                 }
-                else if(selectedPiece.posY == 'H')
+                else if(pecaSelecionada.posY == 'H')
                 {
-                    availablePositionsAttack[0] = selectedPiece.posX - 1;
-                    availablePositionsAttack[1] = selectedPiece.posY - 1;
-                    availablePositionsAttack[2] = selectedPiece.posX - 1;
-                    availablePositionsAttack[3] = selectedPiece.posY - 1;
+                    posicoesAtaqueDisponivel[0] = pecaSelecionada.posX - 1;
+                    posicoesAtaqueDisponivel[1] = pecaSelecionada.posY - 1;
+                    posicoesAtaqueDisponivel[2] = pecaSelecionada.posX - 1;
+                    posicoesAtaqueDisponivel[3] = pecaSelecionada.posY - 1;
                 }
             }
-            else if(random == 1 && whiteTurn == true)
+            else if(random == 1 && turnoBranco == true)
             {
-                availablePositions[0] = selectedPiece.posX - 1;
-                availablePositions[1] = selectedPiece.posY;
-                if(selectedPiece.posY != 'A' && selectedPiece.posY !='H')
+                posicoesDisponiveis[0] = pecaSelecionada.posX - 1;
+                posicoesDisponiveis[1] = pecaSelecionada.posY;
+                if(pecaSelecionada.posY != 'A' && pecaSelecionada.posY !='H')
                 {
-                    availablePositionsAttack[0] = selectedPiece.posX - 1;
-                    availablePositionsAttack[1] = selectedPiece.posY + 1;
-                    availablePositionsAttack[2] = selectedPiece.posX - 1;
-                    availablePositionsAttack[3] = selectedPiece.posY - 1;
+                    posicoesAtaqueDisponivel[0] = pecaSelecionada.posX - 1;
+                    posicoesAtaqueDisponivel[1] = pecaSelecionada.posY + 1;
+                    posicoesAtaqueDisponivel[2] = pecaSelecionada.posX - 1;
+                    posicoesAtaqueDisponivel[3] = pecaSelecionada.posY - 1;
                 }
-                else if(selectedPiece.posY == 'A')
+                else if(pecaSelecionada.posY == 'A')
                 {
-                    availablePositionsAttack[0] = selectedPiece.posX - 1;
-                    availablePositionsAttack[1] = selectedPiece.posY + 1;
-                    availablePositionsAttack[2] = selectedPiece.posX - 1;
-                    availablePositionsAttack[3] = selectedPiece.posY + 1;
+                    posicoesAtaqueDisponivel[0] = pecaSelecionada.posX - 1;
+                    posicoesAtaqueDisponivel[1] = pecaSelecionada.posY + 1;
+                    posicoesAtaqueDisponivel[2] = pecaSelecionada.posX - 1;
+                    posicoesAtaqueDisponivel[3] = pecaSelecionada.posY + 1;
                 }
-                else if(selectedPiece.posY == 'H')
+                else if(pecaSelecionada.posY == 'H')
                 {
-                    availablePositionsAttack[0] = selectedPiece.posX - 1;
-                    availablePositionsAttack[1] = selectedPiece.posY - 1;
-                    availablePositionsAttack[2] = selectedPiece.posX - 1;
-                    availablePositionsAttack[3] = selectedPiece.posY - 1;
+                    posicoesAtaqueDisponivel[0] = pecaSelecionada.posX - 1;
+                    posicoesAtaqueDisponivel[1] = pecaSelecionada.posY - 1;
+                    posicoesAtaqueDisponivel[2] = pecaSelecionada.posX - 1;
+                    posicoesAtaqueDisponivel[3] = pecaSelecionada.posY - 1;
                 }
             }
-            else if(random == 1 && whiteTurn == false)
+            else if(random == 1 && turnoBranco == false)
             {
-                availablePositions[0] = selectedPiece.posX + 1;
-                availablePositions[1] = selectedPiece.posY;
+                posicoesDisponiveis[0] = pecaSelecionada.posX + 1;
+                posicoesDisponiveis[1] = pecaSelecionada.posY;
 
-                if(selectedPiece.posY != 'A' && selectedPiece.posY !='H')
+                if(pecaSelecionada.posY != 'A' && pecaSelecionada.posY !='H')
                 {
-                    availablePositionsAttack[0] = selectedPiece.posX + 1;
-                    availablePositionsAttack[1] = selectedPiece.posY + 1;
-                    availablePositionsAttack[2] = selectedPiece.posX + 1;
-                    availablePositionsAttack[3] = selectedPiece.posY - 1;
+                    posicoesAtaqueDisponivel[0] = pecaSelecionada.posX + 1;
+                    posicoesAtaqueDisponivel[1] = pecaSelecionada.posY + 1;
+                    posicoesAtaqueDisponivel[2] = pecaSelecionada.posX + 1;
+                    posicoesAtaqueDisponivel[3] = pecaSelecionada.posY - 1;
                 }
-                else if(selectedPiece.posY == 'A')
+                else if(pecaSelecionada.posY == 'A')
                 {
-                    availablePositionsAttack[0] = selectedPiece.posX + 1;
-                    availablePositionsAttack[1] = selectedPiece.posY + 1;
-                    availablePositionsAttack[2] = selectedPiece.posX + 1;
-                    availablePositionsAttack[3] = selectedPiece.posY + 1;
+                    posicoesAtaqueDisponivel[0] = pecaSelecionada.posX + 1;
+                    posicoesAtaqueDisponivel[1] = pecaSelecionada.posY + 1;
+                    posicoesAtaqueDisponivel[2] = pecaSelecionada.posX + 1;
+                    posicoesAtaqueDisponivel[3] = pecaSelecionada.posY + 1;
                 }
-                else if(selectedPiece.posY == 'H')
+                else if(pecaSelecionada.posY == 'H')
                 {
-                    availablePositionsAttack[0] = selectedPiece.posX + 1;
-                    availablePositionsAttack[1] = selectedPiece.posY - 1;
-                    availablePositionsAttack[2] = selectedPiece.posX + 1;
-                    availablePositionsAttack[3] = selectedPiece.posY - 1;
+                    posicoesAtaqueDisponivel[0] = pecaSelecionada.posX + 1;
+                    posicoesAtaqueDisponivel[1] = pecaSelecionada.posY - 1;
+                    posicoesAtaqueDisponivel[2] = pecaSelecionada.posX + 1;
+                    posicoesAtaqueDisponivel[3] = pecaSelecionada.posY - 1;
                 }
             }
             
             //printf("-> %d %c\n",availablePositions[0],availablePositions[1]);
-            if(whiteTurn == true)
+            if(turnoBranco == true)
             {
-                bool found1,found2;//found eatable pieces;
-                bool found3 = false;//found forward enemy or ally piece 
+                bool encontro1,encontro2;//found eatable pieces;
+                bool encontro3 = false;//found forward enemy or ally piece 
 
-                for(int i = 0; i < sizeof pieces2/sizeof pieces2[0];i++)
+                for(int i = 0; i < sizeof pecas2/sizeof pecas2[0];i++)
                 {
 
-                    if((pieces2[i].posX == availablePositions[0] && pieces2[i].posY == availablePositions[1]) || (pieces1[i].posX == availablePositions[0] && pieces1[i].posY == availablePositions[1]))
+                    if((pecas2[i].posX == posicoesDisponiveis[0] && pecas2[i].posY == posicoesDisponiveis[1]) || (pecas1[i].posX == posicoesDisponiveis[0] && pecas1[i].posY == posicoesDisponiveis[1]))
                     {
-                        found3 = true;
-                        availablePositions[0] = 0;
-                        availablePositions[1] = 0;
+                        encontro3 = true;
+                        posicoesDisponiveis[0] = 0;
+                        posicoesDisponiveis[1] = 0;
                     }
 
-                    if(pieces2[i].posX == availablePositionsAttack[0] && pieces2[i].posY == availablePositionsAttack[1])
+                    if(pecas2[i].posX == posicoesAtaqueDisponivel[0] && pecas2[i].posY == posicoesAtaqueDisponivel[1])
                     {
-                        printf("-> %d %c\n",availablePositionsAttack[0],availablePositionsAttack[1]);
-                        enemyIndex1 = i;
-                        found1 = true;
+                        printf("-> %d %c\n",posicoesAtaqueDisponivel[0],posicoesAtaqueDisponivel[1]);
+                        indicadorInimigo1 = i;
+                        encontro1 = true;
                     }
 
-                    if(pieces2[i].posX == availablePositionsAttack[2] && pieces2[i].posY == availablePositionsAttack[3])
+                    if(pecas2[i].posX == posicoesAtaqueDisponivel[2] && pecas2[i].posY == posicoesAtaqueDisponivel[3])
                     {
-                        printf("-> %d %c\n",availablePositionsAttack[2],availablePositionsAttack[3]);
-                        enemyIndex2 = i;
-                        found2 = true;
+                        printf("-> %d %c\n",posicoesAtaqueDisponivel[2],posicoesAtaqueDisponivel[3]);
+                        indicadorInimigo2 = i;
+                        encontro2 = true;
                     }
                 }
 
-                if(found1 == false)
+                if(encontro1 == false)
                 {
-                    availablePositionsAttack[0] = 0;
-                    availablePositionsAttack[1] = 0;
+                    posicoesAtaqueDisponivel[0] = 0;
+                    posicoesAtaqueDisponivel[1] = 0;
                 }
-                if(found2 == false)
+                if(encontro2 == false)
                 {
-                    availablePositionsAttack[2] = 0;
-                    availablePositionsAttack[3] = 0;
+                    posicoesAtaqueDisponivel[2] = 0;
+                    posicoesAtaqueDisponivel[3] = 0;
                 }
-                if(found3 == false)
+                if(encontro3 == false)
                 {
-                    printf("-> %d %c\n",availablePositions[0],availablePositions[1]);
+                    printf("-> %d %c\n",posicoesDisponiveis[0],posicoesDisponiveis[1]);
                 }
 
             }
-            else if(whiteTurn ==false)
+            else if(turnoBranco ==false)
             {
-                bool found1,found2;//found eatable enemy piece
-                bool found3 = false;//found forward enemy or ally piece
-                for(int i = 0; i< sizeof pieces1/sizeof pieces1[0];i++)
+                bool encontro1,encontro2;//found eatable enemy piece
+                bool encontro3 = false;//found forward enemy or ally piece
+                for(int i = 0; i< sizeof pecas1/sizeof pecas1[0];i++)
                 {      
-                    if((pieces1[i].posX == availablePositions[0] && pieces1[i].posY == availablePositions[1]) || (pieces2[i].posX == availablePositions[0] && pieces2[i].posY == availablePositions[1]))
+                    if((pecas1[i].posX == posicoesDisponiveis[0] && pecas1[i].posY == posicoesDisponiveis[1]) || (pecas2[i].posX == posicoesDisponiveis[0] && pecas2[i].posY == posicoesDisponiveis[1]))
                     {
-                        found3 = true;
-                        availablePositions[0] = 0;
-                        availablePositions[1] = 0;
+                        encontro3 = true;
+                        posicoesDisponiveis[0] = 0;
+                        posicoesDisponiveis[1] = 0;
                     }
 
-                    if(pieces1[i].posX == availablePositionsAttack[0] && pieces1[i].posY == availablePositionsAttack[1])
+                    if(pecas1[i].posX == posicoesAtaqueDisponivel[0] && pecas1[i].posY == posicoesAtaqueDisponivel[1])
                     {
-                        printf("-> %d %c\n",availablePositionsAttack[0],availablePositionsAttack[1]);
-                        enemyIndex1 = i;
-                        found1 = true;
+                        printf("-> %d %c\n",posicoesAtaqueDisponivel[0],posicoesAtaqueDisponivel[1]);
+                        indicadorInimigo1 = i;
+                        encontro1 = true;
                     }
 
-                    if(pieces1[i].posX == availablePositionsAttack[2] && pieces1[i].posY == availablePositionsAttack[3])
+                    if(pecas1[i].posX == posicoesAtaqueDisponivel[2] && pecas1[i].posY == posicoesAtaqueDisponivel[3])
                     {
-                        printf("-> %d %c\n",availablePositionsAttack[2],availablePositionsAttack[3]);
-                        enemyIndex2 = i;
-                        found2 = true;
+                        printf("-> %d %c\n",posicoesAtaqueDisponivel[2],posicoesAtaqueDisponivel[3]);
+                        indicadorInimigo2 = i;
+                        encontro2 = true;
                     }                    
                 }
-                if(found1 == false)
+                if(encontro1 == false)
                 {
-                    availablePositionsAttack[0] = 0;
-                    availablePositionsAttack[1] = 0;
+                    posicoesAtaqueDisponivel[0] = 0;
+                    posicoesAtaqueDisponivel[1] = 0;
                 }
-                if(found2 == false)
+                if(encontro2 == false)
                 {
-                    availablePositionsAttack[2] = 0;
-                    availablePositionsAttack[3] = 0;
+                    posicoesAtaqueDisponivel[2] = 0;
+                    posicoesAtaqueDisponivel[3] = 0;
                 } 
-                if(found3 == false)
+                if(encontro3 == false)
                 {
-                    printf("-> %d %c\n",availablePositions[0],availablePositions[1]);
+                    printf("-> %d %c\n",posicoesDisponiveis[0],posicoesDisponiveis[1]);
                 }
             }
             
 
             //get position inputed by player
-            if(!(availablePositions[0] == 0 && availablePositions[1] == 0) || !(availablePositionsAttack[0] == 0 && availablePositionsAttack[1] == 0) || !(availablePositionsAttack[2] == 0 && availablePositionsAttack[3] == 0))
+            if(!(posicoesDisponiveis[0] == 0 && posicoesDisponiveis[1] == 0) || !(posicoesAtaqueDisponivel[0] == 0 && posicoesAtaqueDisponivel[1] == 0) || !(posicoesAtaqueDisponivel[2] == 0 && posicoesAtaqueDisponivel[3] == 0))
             {
                 bool checkPosX= false;
                 bool checkPosY= false;
                 do
                 {
-                    printf("Select line:");
+                    printf("Selecione a linha");
                     scanf("%d",&posX);
-                    for (int i = 0; i < sizeof availablePositions /sizeof availablePositions[0]; i+=2)
+                    for (int i = 0; i < sizeof posicoesDisponiveis /sizeof posicoesDisponiveis[0]; i+=2)
                     {
-                        if(posX == availablePositions[i])
+                        if(posX == posicoesDisponiveis[i])
                         {
                             checkPosX = true;
                             break;
                         }                    
                     }     
 
-                    for (int i = 0; i < sizeof availablePositionsAttack /sizeof availablePositionsAttack[0]; i+=2)
+                    for (int i = 0; i < sizeof posicoesAtaqueDisponivel /sizeof posicoesAtaqueDisponivel[0]; i+=2)
                     {
-                        if(posX == availablePositionsAttack[i])
+                        if(posX == posicoesAtaqueDisponivel[i])
                         {
                             checkPosX = true;
                             break;
@@ -655,28 +655,28 @@ void movePiece()
 
                     if(checkPosX == false)//if the choice is outside of the table, teel the player that he is out of bounds
                     {
-                        printf("Not available line for movement!\n");
+                        printf("Linha não disponível para o movimento!\n");
                     }
                 }while(checkPosX == false);
 
                 do
                 {
-                    printf("Select column:");
+                    printf("Selecione a coluna:");
                     scanf(" %c",&posY);
                     posY = toupper(posY);
                     
-                    for (int i = 1; i < sizeof availablePositions /sizeof availablePositions[0]; i+=2)
+                    for (int i = 1; i < sizeof posicoesDisponiveis /sizeof posicoesDisponiveis[0]; i+=2)
                     {
-                        if(posY == availablePositions[i])
+                        if(posY == posicoesDisponiveis[i])
                         {
                             checkPosY = true;
                             break;
                         }                    
                     }
 
-                    for (int i = 1; i < sizeof availablePositionsAttack /sizeof availablePositionsAttack[0]; i+=2)
+                    for (int i = 1; i < sizeof posicoesAtaqueDisponivel /sizeof posicoesAtaqueDisponivel[0]; i+=2)
                     {
-                        if(posY == availablePositionsAttack[i])
+                        if(posY == posicoesAtaqueDisponivel[i])
                         {
                             checkPosY = true;
                             break;
@@ -684,98 +684,98 @@ void movePiece()
                     } 
                     if(checkPosY == false)//if the choice is outside of the table, teel the player that he is out of bounds
                     {
-                        printf("Not available column for movement!\n");
+                        printf("Colona não dispoível para movimento!\n");
                     }
                 }while(checkPosY == false);
 
-                if(whiteTurn == true)
+                if(turnoBranco == true)
                 {
-                    if((posX == pieces2[enemyIndex1].posX && posY == pieces2[enemyIndex1].posY))
+                    if((posX == pecas2[indicadorInimigo1].posX && posY == pecas2[indicadorInimigo1].posY))
                     {
-                        pieces2[enemyIndex1].posX = 0;
-                        pieces2[enemyIndex1].posY = 0;
+                        pecas2[indicadorInimigo1].posX = 0;
+                        pecas2[indicadorInimigo1].posY = 0;
 
                     }
 
-                    if((posX == pieces2[enemyIndex2].posX && posY == pieces2[enemyIndex2].posY))
+                    if((posX == pecas2[indicadorInimigo2].posX && posY == pecas2[indicadorInimigo2].posY))
                     {
-                        pieces2[enemyIndex2].posX = 0;
-                        pieces2[enemyIndex2].posY = 0;
+                        pecas2[indicadorInimigo2].posX = 0;
+                        pecas2[indicadorInimigo2].posY = 0;
                     }
                     
-                    pieces1[index].posX = posX;
-                    pieces1[index].posY = posY;
+                    pecas1[index].posX = posX;
+                    pecas1[index].posY = posY;
                 }
                 else
                 {
-                    if((posX == pieces1[enemyIndex1].posX && posY == pieces1[enemyIndex1].posY))
+                    if((posX == pecas1[indicadorInimigo1].posX && posY == pecas1[indicadorInimigo1].posY))
                     {
-                        pieces1[enemyIndex1].posX = 0;
-                        pieces1[enemyIndex1].posY = 0;
+                        pecas1[indicadorInimigo1].posX = 0;
+                        pecas1[indicadorInimigo1].posY = 0;
                     }
 
-                    if((posX == pieces1[enemyIndex2].posX && posY == pieces1[enemyIndex2].posY))
+                    if((posX == pecas1[indicadorInimigo2].posX && posY == pecas1[indicadorInimigo2].posY))
                     {
-                        pieces1[enemyIndex2].posX = 0;
-                        pieces1[enemyIndex2].posY = 0;
+                        pecas1[indicadorInimigo2].posX = 0;
+                        pecas1[indicadorInimigo2].posY = 0;
                     }
 
-                    pieces2[index].posX = posX;
-                    pieces2[index].posY = posY;
+                    pecas2[index].posX = posX;
+                    pecas2[index].posY = posY;
                 }                                
             }
         }
-        else if(selectedPiece.costume == 'r' || selectedPiece.costume == 'R')//movement rook
+        else if(pecaSelecionada.costume == 'r' || pecaSelecionada.costume == 'R')//movement rook
         {
-            int diferenceTop = selectedPiece.posX - 1;
-            int diferenceRight = 'H' - selectedPiece.posY;
-            int diferenceBottom = 8 - selectedPiece.posX;
-            int diferenceLeft = selectedPiece.posY - 'A';
+            int diferencaCima = pecaSelecionada.posX - 1;
+            int diferencaDireita = 'H' - pecaSelecionada.posY;
+            int diferencaBaixo = 8 - pecaSelecionada.posX;
+            int diferencaEsquerda = pecaSelecionada.posY - 'A';
             //int availablePositions[14][2] = {0};
             
-            int availablePositionsTop[7][2] = {0};
-            int availablePositionsBottom[7][2] = {0};
-            int availablePositionsRight[7][2] = {0};
-            int availablePositionsLeft[7][2] = {0};
+            int posicaoDisponivelCima[7][2] = {0};
+            int posicaoDisponivelBaixo[7][2] = {0};
+            int posicaoDisponivelDireita[7][2] = {0};
+            int posicaoDisponivelEsquerda[7][2] = {0};
             //int counter = 0;
 
-            bool foundPiece = false;
+            bool encontroPeca = false;
 
             // printf("%d",diferenceTop);    
-            for(int i = 0; i<diferenceTop;i++)//positions on top of tower
+            for(int i = 0; i<diferencaCima;i++)//positions on top of tower
             {
                 for(int p = 0;p < 16;p++)
                 {
-                    if(whiteTurn == true)
+                    if(turnoBranco == true)
                     {
-                        if(pieces1[p].posX == selectedPiece.posX-(i+1) && pieces1[p].posY == selectedPiece.posY)
+                        if(pecas1[p].posX == pecaSelecionada.posX-(i+1) && pecas1[p].posY == pecaSelecionada.posY)
                         {
-                            foundPiece = true;
-                            availablePositionsTop[i][0] = 0;
-                            availablePositionsTop[i][1] = 0;
+                            encontroPeca = true;
+                            posicaoDisponivelCima[i][0] = 0;
+                            posicaoDisponivelCima[i][1] = 0;
                             // counter++;
                             break;
                         }
-                        else if(foundPiece == false)
+                        else if(encontroPeca == false)
                         {
-                            availablePositionsTop[i][0] = selectedPiece.posX-(i+1);
-                            availablePositionsTop[i][1] = selectedPiece.posY;
+                            posicaoDisponivelCima[i][0] = pecaSelecionada.posX-(i+1);
+                            posicaoDisponivelCima[i][1] = pecaSelecionada.posY;
                             //counter++;
                         }
-                    }else if(whiteTurn == false)
+                    }else if(turnoBranco == false)
                     {
-                        if(pieces2[p].posX == selectedPiece.posX-(i+1) && pieces2[p].posY == selectedPiece.posY)
+                        if(pecas2[p].posX == pecaSelecionada.posX-(i+1) && pecas2[p].posY == pecaSelecionada.posY)
                         {
-                            foundPiece = true;
-                            availablePositionsTop[i][0] = 0;
-                            availablePositionsTop[i][1] = 0;
+                            encontroPeca = true;
+                            posicaoDisponivelCima[i][0] = 0;
+                            posicaoDisponivelCima[i][1] = 0;
                             // counter++;
                             break;
                         }
-                        else if(foundPiece == false)
+                        else if(encontroPeca == false)
                         {
-                            availablePositionsTop[i][0] = selectedPiece.posX-(i+1);
-                            availablePositionsTop[i][1] = selectedPiece.posY;
+                            posicaoDisponivelCima[i][0] = pecaSelecionada.posX-(i+1);
+                            posicaoDisponivelCima[i][1] = pecaSelecionada.posY;
                             //counter++;
                         }
                     }                    
@@ -783,41 +783,41 @@ void movePiece()
             }
 
             //printf("%d\n",counter);
-            foundPiece = false;            
-            for(int i = 0; i<diferenceBottom;i++)//positions on bottom of tower
+            encontroPeca = false;            
+            for(int i = 0; i<diferencaBaixo;i++)//positions on bottom of tower
             {
                 for(int p = 0;p < 16;p++)
                 {
-                    if(whiteTurn == true)
+                    if(turnoBranco == true)
                     {
-                        if(pieces1[p].posX == selectedPiece.posX+(i+1) && pieces1[p].posY == selectedPiece.posY)
+                        if(pecas1[p].posX == pecaSelecionada.posX+(i+1) && pecas1[p].posY == pecaSelecionada.posY)
                         {
-                            foundPiece = true;
-                            availablePositionsBottom[i][0] = 0;
-                            availablePositionsBottom[i][1] = 0;
+                            encontroPeca = true;
+                            posicaoDisponivelBaixo[i][0] = 0;
+                            posicaoDisponivelBaixo[i][1] = 0;
                             //counter++;
                             break;
                         }
-                        else if(foundPiece == false)
+                        else if(encontroPeca == false)
                         {
-                            availablePositionsBottom[i][0] = selectedPiece.posX+(i+1);
-                            availablePositionsBottom[i][1] = selectedPiece.posY;
+                            posicaoDisponivelBaixo[i][0] = pecaSelecionada.posX+(i+1);
+                            posicaoDisponivelBaixo[i][1] = pecaSelecionada.posY;
                             //counter++;
                         }
-                    }else if(whiteTurn == false)
+                    }else if(turnoBranco == false)
                     {
-                        if(pieces2[p].posX == selectedPiece.posX+(i+1) && pieces2[p].posY == selectedPiece.posY)
+                        if(pecas2[p].posX == pecaSelecionada.posX+(i+1) && pecas2[p].posY == pecaSelecionada.posY)
                         {
-                            foundPiece = true;
-                            availablePositionsBottom[i][0] = 0;
-                            availablePositionsBottom[i][1] = 0;
+                            encontroPeca = true;
+                            posicaoDisponivelBaixo[i][0] = 0;
+                            posicaoDisponivelBaixo[i][1] = 0;
                             //counter++;
                             break;
                         }
-                        else if(foundPiece == false)
+                        else if(encontroPeca == false)
                         {
-                            availablePositionsBottom[i][0] = selectedPiece.posX+(i+1);
-                            availablePositionsBottom[i][1] = selectedPiece.posY;
+                            posicaoDisponivelBaixo[i][0] = pecaSelecionada.posX+(i+1);
+                            posicaoDisponivelBaixo[i][1] = pecaSelecionada.posY;
                             //counter++;
                         }
                     }        
@@ -825,138 +825,138 @@ void movePiece()
             }
             // printf("%d\n",counter);
             //foundPiece = false;
-            for(int i = 0; i<diferenceRight;i++)//positions on bottom of tower
+            for(int i = 0; i<diferencaDireita;i++)//positions on bottom of tower
             {
                 for(int p = 0;p < 16;p++)
                 {
-                    if(whiteTurn == true)
+                    if(turnoBranco == true)
                     {
-                        if(pieces1[p].posX == selectedPiece.posX && pieces1[p].posY == selectedPiece.posY+(i+1))
+                        if(pecas1[p].posX == pecaSelecionada.posX && pecas1[p].posY == pecaSelecionada.posY+(i+1))
                         {
-                            foundPiece = true;
-                            availablePositionsRight[i][0] = 0;
-                            availablePositionsRight[i][1] = 0;
+                            encontroPeca = true;
+                            posicaoDisponivelDireita[i][0] = 0;
+                            posicaoDisponivelDireita[i][1] = 0;
                             // counter++;
                             break;
                         }
-                        else if(foundPiece == false)
+                        else if(encontroPeca == false)
                         {
-                            availablePositionsRight[i][0] = selectedPiece.posX;
-                            availablePositionsRight[i][1] = selectedPiece.posY+(i+1);
+                            posicaoDisponivelDireita[i][0] = pecaSelecionada.posX;
+                            posicaoDisponivelDireita[i][1] = pecaSelecionada.posY+(i+1);
                             // counter++;
                         }
-                    }else if(whiteTurn == false)
+                    }else if(turnoBranco == false)
                     {
                         printf("Passei aqui1!\n");
-                        if(pieces2[p].posX == selectedPiece.posX && pieces2[p].posY == selectedPiece.posY+(i+1))
+                        if(pecas2[p].posX == pecaSelecionada.posX && pecas2[p].posY == pecaSelecionada.posY+(i+1))
                         {
                             printf("Passei aqui2!\n");
-                            foundPiece = true;
-                            availablePositionsRight[i][0] = 0;
-                            availablePositionsRight[i][1] = 0;
+                            encontroPeca = true;
+                            posicaoDisponivelDireita[i][0] = 0;
+                            posicaoDisponivelDireita[i][1] = 0;
                             // counter++;
                             break;
                         }
-                        else if(foundPiece == false)
+                        else if(encontroPeca == false)
                         {
                             printf("Passei aqui3!\n");
-                            availablePositionsRight[i][0] = selectedPiece.posX;
-                            availablePositionsRight[i][1] = selectedPiece.posY+(i+1);
+                            posicaoDisponivelDireita[i][0] = pecaSelecionada.posX;
+                            posicaoDisponivelDireita[i][1] = pecaSelecionada.posY+(i+1);
                             // counter++;
                         }
                     }        
                 }
             }
-            foundPiece = false;
-            for(int i = 0; i<diferenceLeft;i++)//positions on bottom of tower
+            encontroPeca = false;
+            for(int i = 0; i<diferencaEsquerda;i++)//positions on bottom of tower
             {
                 for(int p = 0;p < 16;p++)
                 {
-                    if(whiteTurn == true)
+                    if(turnoBranco == true)
                     {
-                        if(pieces1[p].posX == selectedPiece.posX && pieces1[p].posY == selectedPiece.posY-(i+1))
+                        if(pecas1[p].posX == pecaSelecionada.posX && pecas1[p].posY == pecaSelecionada.posY-(i+1))
                         {
-                            foundPiece = true;
-                            availablePositionsLeft[i][0] = 0;
-                            availablePositionsLeft[i][1] = 0;
+                            encontroPeca = true;
+                            posicaoDisponivelEsquerda[i][0] = 0;
+                            posicaoDisponivelEsquerda[i][1] = 0;
                             // counter++;
                             break;
                         }
-                        else if(foundPiece == false)
+                        else if(encontroPeca == false)
                         {
-                            availablePositionsLeft[i][0] = selectedPiece.posX;
-                            availablePositionsLeft[i][1] = selectedPiece.posY-(i+1);
+                            posicaoDisponivelEsquerda[i][0] = pecaSelecionada.posX;
+                            posicaoDisponivelEsquerda[i][1] = pecaSelecionada.posY-(i+1);
                             // counter++;
                         }
-                    }else if(whiteTurn == false)
+                    }else if(turnoBranco == false)
                     {
-                        if(pieces2[p].posX == selectedPiece.posX && pieces2[p].posY == selectedPiece.posY-(i+1))
+                        if(pecas2[p].posX == pecaSelecionada.posX && pecas2[p].posY == pecaSelecionada.posY-(i+1))
                         {
-                            foundPiece = true;
-                            availablePositionsLeft[i][0] = 0;
-                            availablePositionsLeft[i][1] = 0;
+                            encontroPeca = true;
+                            posicaoDisponivelEsquerda[i][0] = 0;
+                            posicaoDisponivelEsquerda[i][1] = 0;
                             // counter++;
                             break;
                         }
-                        else if(foundPiece == false)
+                        else if(encontroPeca == false)
                         {
-                            availablePositionsLeft[i][0] = selectedPiece.posX;
-                            availablePositionsLeft[i][1] = selectedPiece.posY-(i+1);
+                            posicaoDisponivelEsquerda[i][0] = pecaSelecionada.posX;
+                            posicaoDisponivelEsquerda[i][1] = pecaSelecionada.posY-(i+1);
                             // counter++;
                         }
                     }        
                 }
             }
 
-            bool foundPosition = false;
+            bool encontroPosicao = false;
 
             for(int i = 0;i<7;i++)
             {
-                if(availablePositionsTop[i][0] != 0 && availablePositionsTop[i][1] != 0)
+                if(posicaoDisponivelCima[i][0] != 0 && posicaoDisponivelCima[i][1] != 0)
                 {
-                    printf("-> %d %c\n",availablePositionsTop[i][0],availablePositionsTop[i][1]);
-                    foundPosition = true;
+                    printf("-> %d %c\n",posicaoDisponivelCima[i][0],posicaoDisponivelCima[i][1]);
+                    encontroPosicao = true;
                 }
             }
 
             for(int i = 0;i<7;i++)
             {
-                if(availablePositionsBottom[i][0] != 0 && availablePositionsBottom[i][1] != 0)
+                if(posicaoDisponivelBaixo[i][0] != 0 && posicaoDisponivelBaixo[i][1] != 0)
                 {
-                    printf("-> %d %c\n",availablePositionsBottom[i][0],availablePositionsBottom[i][1]);
-                    foundPosition = true;
+                    printf("-> %d %c\n",posicaoDisponivelBaixo[i][0],posicaoDisponivelBaixo[i][1]);
+                    encontroPosicao = true;
                 }
             }
 
             for(int i = 0;i<7;i++)
             {
-                if(availablePositionsLeft[i][0] != 0 && availablePositionsLeft[i][1] != 0)
+                if(posicaoDisponivelEsquerda[i][0] != 0 && posicaoDisponivelEsquerda[i][1] != 0)
                 {
-                    printf("-> %d %c\n",availablePositionsLeft[i][0],availablePositionsLeft[i][1]);
-                    foundPosition = true;
+                    printf("-> %d %c\n",posicaoDisponivelEsquerda[i][0],posicaoDisponivelEsquerda[i][1]);
+                    encontroPosicao = true;
                 }
             }
 
             for(int i = 0;i<7;i++)
             {
-                if(availablePositionsRight[i][0] != 0 && availablePositionsRight[i][1] != 0)
+                if(posicaoDisponivelDireita[i][0] != 0 && posicaoDisponivelDireita[i][1] != 0)
                 {
-                    printf("-> %d %c\n",availablePositionsRight[i][0],availablePositionsRight[i][1]);
-                    foundPosition = true;
+                    printf("-> %d %c\n",posicaoDisponivelDireita[i][0],posicaoDisponivelDireita[i][1]);
+                    encontroPosicao = true;
                 }
             }
 
             bool checkPosX = false;
             bool checkPosY = false;
-            if(foundPosition)
+            if(encontroPosicao)
             {
                 do
                 {
-                    printf("Select Line: ");
+                    printf("Selecione a linha: ");
                     scanf("%d",&posX);
                     for(int l = 0; l < 14;l++)
                     {
-                        if((posX == availablePositionsTop[l][0] || posX == availablePositionsBottom[l][0] || posX == availablePositionsLeft[l][0] || posX == availablePositionsRight[l][0]) && posX != 0)
+                        if((posX == posicaoDisponivelCima[l][0] || posX == posicaoDisponivelBaixo[l][0] || posX == posicaoDisponivelEsquerda[l][0] || posX == posicaoDisponivelDireita[l][0]) && posX != 0)
                         {
                             checkPosX = true;
                             break;
@@ -964,19 +964,19 @@ void movePiece()
                     }
                     if(checkPosX == false)
                     {
-                        printf("Not available line for movement\n");
+                        printf("Linha não disponivel para movimento\n");
                     }
                     
                 } while (checkPosX == false);
                 
                 do
                 {
-                    printf("Select Column: ");
+                    printf("Selecione a coluna: ");
                     scanf(" %c",&posY);
                     posY = toupper(posY);
                     for(int l = 0; l < 14;l++)
                     {
-                        if((posY == availablePositionsTop[l][1] || posY == availablePositionsBottom[l][1] || posY == availablePositionsLeft[l][1] || posY == availablePositionsRight[l][1]) && posY != 0)
+                        if((posY == posicaoDisponivelCima[l][1] || posY == posicaoDisponivelBaixo[l][1] || posY == posicaoDisponivelEsquerda[l][1] || posY == posicaoDisponivelDireita[l][1]) && posY != 0)
                         {
                             checkPosY = true;
                             break;
@@ -984,114 +984,114 @@ void movePiece()
                     }
                     if(checkPosY == false)
                     {
-                        printf("Not available column for movement\n");
+                        printf("Coluna não disponivel para movimento\n");
                     }
                     
                 } while (checkPosY == false);
 
-                if(whiteTurn == true)
+                if(turnoBranco == true)
                 {
-                    pieces1[index].posX = posX;
-                    pieces1[index].posY = posY;
+                    pecas1[index].posX = posX;
+                    pecas1[index].posY = posY;
 
                 }else
                 {
-                    pieces2[index].posX = posX;
-                    pieces2[index].posY = posY;
+                    pecas2[index].posX = posX;
+                    pecas2[index].posY = posY;
                 }
             }            
         }
-        else if(selectedPiece.costume == 'n' || selectedPiece.costume == 'N')//movement of knight
+        else if(pecaSelecionada.costume == 'n' || pecaSelecionada.costume == 'N')//movement of knight
         {
             //-> move in L chape 
-            int availablePositions[8][2] = {0};
+            int posicoesDisponiveis[8][2] = {0};
             bool checkPosX = false;
             bool checkPosY = false;
-            availablePositions[0][0] = selectedPiece.posX+2;
-            availablePositions[1][0] = selectedPiece.posX+2;
-            availablePositions[0][1] = selectedPiece.posY-1;
-            availablePositions[1][1] = selectedPiece.posY+1;
+            posicoesDisponiveis[0][0] = pecaSelecionada.posX+2;
+            posicoesDisponiveis[1][0] = pecaSelecionada.posX+2;
+            posicoesDisponiveis[0][1] = pecaSelecionada.posY-1;
+            posicoesDisponiveis[1][1] = pecaSelecionada.posY+1;
 
-            availablePositions[2][0] = selectedPiece.posX+1;
-            availablePositions[3][0] = selectedPiece.posX-1;
-            availablePositions[2][1] = selectedPiece.posY+2;
-            availablePositions[3][1] = selectedPiece.posY+2;
+            posicoesDisponiveis[2][0] = pecaSelecionada.posX+1;
+            posicoesDisponiveis[3][0] = pecaSelecionada.posX-1;
+            posicoesDisponiveis[2][1] = pecaSelecionada.posY+2;
+            posicoesDisponiveis[3][1] = pecaSelecionada.posY+2;
 
-            availablePositions[4][0] = selectedPiece.posX-2;
-            availablePositions[5][0] = selectedPiece.posX-2;
-            availablePositions[4][1] = selectedPiece.posY-1;
-            availablePositions[5][1] = selectedPiece.posY+1;
+            posicoesDisponiveis[4][0] = pecaSelecionada.posX-2;
+            posicoesDisponiveis[5][0] = pecaSelecionada.posX-2;
+            posicoesDisponiveis[4][1] = pecaSelecionada.posY-1;
+            posicoesDisponiveis[5][1] = pecaSelecionada.posY+1;
 
-            availablePositions[6][0] = selectedPiece.posX-1;
-            availablePositions[7][0] = selectedPiece.posX+1;
-            availablePositions[6][1] = selectedPiece.posY-2;
-            availablePositions[7][1] = selectedPiece.posY-2;
+            posicoesDisponiveis[6][0] = pecaSelecionada.posX-1;
+            posicoesDisponiveis[7][0] = pecaSelecionada.posX+1;
+            posicoesDisponiveis[6][1] = pecaSelecionada.posY-2;
+            posicoesDisponiveis[7][1] = pecaSelecionada.posY-2;
           
 
 
             for(int i = 0; i < 8 ; i++)
             {
-                if(availablePositions[i][0] < 1 || availablePositions[i][0] > 8)
+                if(posicoesDisponiveis[i][0] < 1 || posicoesDisponiveis[i][0] > 8)
                 {
-                    availablePositions[i][0] = 0;
-                    availablePositions[i][1] = 0;
+                    posicoesDisponiveis[i][0] = 0;
+                    posicoesDisponiveis[i][1] = 0;
                 }
 
-                if(availablePositions[i][1] < 'A' || availablePositions[i][1] > 'H')
+                if(posicoesDisponiveis[i][1] < 'A' || posicoesDisponiveis[i][1] > 'H')
                 {
-                    availablePositions[i][0] = 0;
-                    availablePositions[i][1] = 0;
+                    posicoesDisponiveis[i][0] = 0;
+                    posicoesDisponiveis[i][1] = 0;
                 }
             }
 
-            if(whiteTurn == true)
+            if(turnoBranco == true)
             {
                 for(int p = 0; p < 16 ; p++)
                 {
                     for(int pos = 0; pos < 8 ; pos++)
                     {
-                        if(pieces1[p].posX == availablePositions[pos][0] && pieces1[p].posY == availablePositions[pos][1])
+                        if(pecas1[p].posX == posicoesDisponiveis[pos][0] && pecas1[p].posY == posicoesDisponiveis[pos][1])
                         {
-                            availablePositions[pos][0] = 0;
-                            availablePositions[pos][1] = 0;
+                            posicoesDisponiveis[pos][0] = 0;
+                            posicoesDisponiveis[pos][1] = 0;
                         }
                     }
                 }
             }
-            else if(whiteTurn == false)
+            else if(turnoBranco == false)
             {
                 for(int p = 0; p < 16 ; p++)
                 {
                     for(int pos = 0; pos < 8 ; pos++)
                     {
-                        if(pieces2[p].posX == availablePositions[pos][0] && pieces2[p].posY == availablePositions[pos][1])
+                        if(pecas2[p].posX == posicoesDisponiveis[pos][0] && pecas2[p].posY == posicoesDisponiveis[pos][1])
                         {
-                            availablePositions[pos][0] = 0;
-                            availablePositions[pos][1] = 0;
+                            posicoesDisponiveis[pos][0] = 0;
+                            posicoesDisponiveis[pos][1] = 0;
                         }
                     }
                 }
             }
 
-            bool existPositions = false;
+            bool posicoesExistentes = false;
             for(int i = 0;i<8;i++)
             {
-                if(availablePositions[i][0] != 0 && availablePositions[i][1] != 0)
+                if(posicoesDisponiveis[i][0] != 0 && posicoesDisponiveis[i][1] != 0)
                 {
-                    printf("-> %d %c\n",availablePositions[i][0],availablePositions[i][1]);
-                    existPositions = true;
+                    printf("-> %d %c\n",posicoesDisponiveis[i][0],posicoesDisponiveis[i][1]);
+                    posicoesExistentes = true;
                 }
             }
 
-            if(existPositions == true)
+            if(posicoesExistentes == true)
             {
                 do
                 {
-                    printf("Select line: ");
+                    printf("Selecione a linha: ");
                     scanf("%d",&posX);
                     for(int pos = 0; pos < 8 ; pos++)
                     {
-                        if(availablePositions[pos][0] == posX)
+                        if(posicoesDisponiveis[pos][0] == posX)
                         {
                             checkPosX = true;
                             break;
@@ -1102,19 +1102,19 @@ void movePiece()
                     }
                     if(checkPosX == false)
                     {
-                        printf("Not available line for movement!\n");
+                        printf("Linha não dispoível para movimento!");
                     }
 
                 } while (checkPosX == false);
                 
                 do
                 {
-                    printf("Select column: ");
+                    printf("Selecione a coluna: ");
                     scanf(" %c",&posY);
                     posY = toupper(posY);
                     for(int pos = 0; pos < 8 ; pos++)
                     {
-                        if(availablePositions[pos][1] == posY)
+                        if(posicoesDisponiveis[pos][1] == posY)
                         {
                             checkPosY = true;
                             break;
@@ -1125,114 +1125,114 @@ void movePiece()
                     }
                     if(checkPosY == false)
                     {
-                        printf("Not available column for movement!\n");
+                        printf("Coluna não dispoível para o movimento!");
                     }
                 } while (checkPosY == false);
 
-                if(whiteTurn == true)
+                if(turnoBranco == true)
                 {
                     for(int i = 0; i<16;i++)
                     {
-                        if(posX == pieces2[i].posX && posY == pieces2[i].posY)
+                        if(posX == pecas2[i].posX && posY == pecas2[i].posY)
                         {
-                            pieces2[i].posX = 0;
-                            pieces2[i].posY = 0;
+                            pecas2[i].posX = 0;
+                            pecas2[i].posY = 0;
                             break;
                         }
                     }
-                    pieces1[index].posX = posX;
-                    pieces1[index].posY = posY;
+                    pecas1[index].posX = posX;
+                    pecas1[index].posY = posY;
 
                 }
-                else if(whiteTurn == false)
+                else if(turnoBranco == false)
                 {
                     for(int i = 0; i<16;i++)
                     {
-                        if(posX == pieces1[i].posX && posY == pieces1[i].posY)
+                        if(posX == pecas1[i].posX && posY == pecas1[i].posY)
                         {
-                            pieces1[i].posX = 0;
-                            pieces1[i].posY = 0;
+                            pecas1[i].posX = 0;
+                            pecas1[i].posY = 0;
                             break;
                         }
                     }
-                    pieces2[index].posX = posX;
-                    pieces2[index].posY = posY;                
+                    pecas2[index].posX = posX;
+                    pecas2[index].posY = posY;                
                 }
             }            
         }
-        else if(selectedPiece.costume == 'b' || selectedPiece.costume == 'B')//movement of bishop
+        else if(pecaSelecionada.costume == 'b' || pecaSelecionada.costume == 'B')//movivento do bispo
         {
-            //-> moves diagonaly
+            //-> diagonal
         }
-        else if(selectedPiece.costume == 'q' || selectedPiece.costume == 'Q')//movement of Queen
+        else if(pecaSelecionada.costume == 'q' || pecaSelecionada.costume == 'Q')//movimento da Rainha
         {
-            //-> moves at any direction as many spaces as needed
+            //-> em todas as direções o quanto quiseres
         }
-        else if(selectedPiece.costume == 'k' || selectedPiece.costume == 'K')//movement of King
+        else if(pecaSelecionada.costume == 'k' || pecaSelecionada.costume == 'K')//Movimento do Rei
         {
-            //-> moves at any direction only once
-            int availablePositions[8][2] = {0};
+            //-> em todas as direções apenas um tile.
+            int posicoesDisponiveis[8][2] = {0};
             bool checkPosX = false;
             bool checkPosY = false;
-            availablePositions[0][0] = selectedPiece.posX+1;
-            availablePositions[0][1] = selectedPiece.posY;
-            availablePositions[1][0] = selectedPiece.posX+1;
-            availablePositions[1][1] = selectedPiece.posY+1;
-            availablePositions[2][0] = selectedPiece.posX+1;
-            availablePositions[2][1] = selectedPiece.posY-1;
+            posicoesDisponiveis[0][0] = pecaSelecionada.posX+1;
+            posicoesDisponiveis[0][1] = pecaSelecionada.posY;
+            posicoesDisponiveis[1][0] = pecaSelecionada.posX+1;
+            posicoesDisponiveis[1][1] = pecaSelecionada.posY+1;
+            posicoesDisponiveis[2][0] = pecaSelecionada.posX+1;
+            posicoesDisponiveis[2][1] = pecaSelecionada.posY-1;
 
-            availablePositions[3][0] = selectedPiece.posX-1;
-            availablePositions[3][1] = selectedPiece.posY;
-            availablePositions[4][0] = selectedPiece.posX-1;
-            availablePositions[4][1] = selectedPiece.posY+1;
-            availablePositions[5][0] = selectedPiece.posX-1;
-            availablePositions[5][1] = selectedPiece.posY-1;
+            posicoesDisponiveis[3][0] = pecaSelecionada.posX-1;
+            posicoesDisponiveis[3][1] = pecaSelecionada.posY;
+            posicoesDisponiveis[4][0] = pecaSelecionada.posX-1;
+            posicoesDisponiveis[4][1] = pecaSelecionada.posY+1;
+            posicoesDisponiveis[5][0] = pecaSelecionada.posX-1;
+            posicoesDisponiveis[5][1] = pecaSelecionada.posY-1;
 
-            availablePositions[6][0] = selectedPiece.posX;
-            availablePositions[6][1] = selectedPiece.posY-1;
+            posicoesDisponiveis[6][0] = pecaSelecionada.posX;
+            posicoesDisponiveis[6][1] = pecaSelecionada.posY-1;
 
-            availablePositions[7][0] = selectedPiece.posX;
-            availablePositions[7][1] = selectedPiece.posY+1;
+            posicoesDisponiveis[7][0] = pecaSelecionada.posX;
+            posicoesDisponiveis[7][1] = pecaSelecionada.posY+1;
 
             for(int i = 0; i < 8 ; i++)
             {
-                if(availablePositions[i][0] < 1 || availablePositions[i][0] > 8)
+                if(posicoesDisponiveis[i][0] < 1 || posicoesDisponiveis[i][0] > 8)
                 {
-                    availablePositions[i][0] = 0;
-                    availablePositions[i][1] = 0;
+                    posicoesDisponiveis[i][0] = 0;
+                    posicoesDisponiveis[i][1] = 0;
                 }
 
-                if(availablePositions[i][1] < 'A' || availablePositions[i][1] > 'H')
+                if(posicoesDisponiveis[i][1] < 'A' || posicoesDisponiveis[i][1] > 'H')
                 {
-                    availablePositions[i][0] = 0;
-                    availablePositions[i][1] = 0;
+                    posicoesDisponiveis[i][0] = 0;
+                    posicoesDisponiveis[i][1] = 0;
                 }
             }
 
-            if(whiteTurn == true)
+            if(turnoBranco == true)
             {
                 for(int p = 0; p < 16 ; p++)
                 {
                     for(int pos = 0; pos < 8 ; pos++)
                     {
-                        if(pieces1[p].posX == availablePositions[pos][0] && pieces1[p].posY == availablePositions[pos][1])
+                        if(pecas1[p].posX == posicoesDisponiveis[pos][0] && pecas1[p].posY == posicoesDisponiveis[pos][1])
                         {
-                            availablePositions[pos][0] = 0;
-                            availablePositions[pos][1] = 0;
+                            posicoesDisponiveis[pos][0] = 0;
+                            posicoesDisponiveis[pos][1] = 0;
                         }
                     }
                 }
             }
-            else if(whiteTurn == false)
+            else if(turnoBranco == false)
             {
                 for(int p = 0; p < 16 ; p++)
                 {
                     for(int pos = 0; pos < 8 ; pos++)
                     {
-                        if(pieces2[p].posX == availablePositions[pos][0] && pieces2[p].posY == availablePositions[pos][1])
+                        if(pecas2[p].posX == posicoesDisponiveis[pos][0] && pecas2[p].posY == posicoesDisponiveis[pos][1])
                         {
-                            availablePositions[pos][0] = 0;
-                            availablePositions[pos][1] = 0;
+                            posicoesDisponiveis[pos][0] = 0;
+                            posicoesDisponiveis[pos][1] = 0;
                         }
                     }
                 }
@@ -1240,9 +1240,9 @@ void movePiece()
             bool existPositions = false;
             for(int i = 0;i<8;i++)
             {
-                if(availablePositions[i][0] != 0 && availablePositions[i][1] != 0)
+                if(posicoesDisponiveis[i][0] != 0 && posicoesDisponiveis[i][1] != 0)
                 {
-                    printf("-> %d %c\n",availablePositions[i][0],availablePositions[i][1]);
+                    printf("-> %d %c\n",posicoesDisponiveis[i][0],posicoesDisponiveis[i][1]);
                     existPositions = true;
                 }
             }
@@ -1251,11 +1251,11 @@ void movePiece()
             {
                 do
                 {
-                    printf("Select line: ");
+                    printf("Selecione a linha: ");
                     scanf("%d",&posX);
                     for(int pos = 0; pos < 8 ; pos++)
                     {
-                        if(availablePositions[pos][0] == posX)
+                        if(posicoesDisponiveis[pos][0] == posX)
                         {
                             checkPosX = true;
                             break;
@@ -1266,19 +1266,19 @@ void movePiece()
                     }
                     if(checkPosX == false)
                     {
-                        printf("Not available line for movement!\n");
+                        printf("Linha não disponivel para movimento\n");
                     }
 
                 } while (checkPosX == false);
                 
                 do
                 {
-                    printf("Select column: ");
+                    printf("Selecione a coluna: ");
                     scanf(" %c",&posY);
                     posY = toupper(posY);
                     for(int pos = 0; pos < 8 ; pos++)
                     {
-                        if(availablePositions[pos][1] == posY)
+                        if(posicoesDisponiveis[pos][1] == posY)
                         {
                             checkPosY = true;
                             break;
@@ -1289,43 +1289,43 @@ void movePiece()
                     }
                     if(checkPosY == false)
                     {
-                        printf("Not available column for movement!\n");
+                        printf("Coluna não disponivel para movimento\n");
                     }
                 } while (checkPosY == false);
 
-                if(whiteTurn == true)
+                if(turnoBranco == true)
                 {
                     for(int i = 0; i<16;i++)
                     {
-                        if(posX == pieces2[i].posX && posY == pieces2[i].posY)
+                        if(posX == pecas2[i].posX && posY == pecas2[i].posY)
                         {
-                            pieces2[i].posX = 0;
-                            pieces2[i].posY = 0;
+                            pecas2[i].posX = 0;
+                            pecas2[i].posY = 0;
                         }
                     }
-                    pieces1[index].posX = posX;
-                    pieces1[index].posY = posY;
+                    pecas1[index].posX = posX;
+                    pecas1[index].posY = posY;
 
                 }
-                else if(whiteTurn == false)
+                else if(turnoBranco == false)
                 {
                     for(int i = 0; i<16;i++)
                     {
-                        if(posX == pieces1[i].posX && posY == pieces1[i].posY)
+                        if(posX == pecas1[i].posX && posY == pecas1[i].posY)
                         {
-                            pieces1[i].posX = 0;
-                            pieces1[i].posY = 0;
+                            pecas1[i].posX = 0;
+                            pecas1[i].posY = 0;
                             break;
                         }
                     }
-                    pieces2[index].posX = posX;
-                    pieces2[index].posY = posY;                
+                    pecas2[index].posX = posX;
+                    pecas2[index].posY = posY;                
                 }
             }          
         }
         
         reCreateTable();
-        whiteTurn = !whiteTurn;    
+        turnoBranco = !turnoBranco;    
 }    
 
 
