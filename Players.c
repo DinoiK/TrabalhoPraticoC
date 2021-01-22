@@ -10,7 +10,7 @@
 //------------- Individual Player Struct - Defines PlayerName  ------------------//
 typedef struct
 {
-    char nickname[12];
+    char nickname[15];
 }player;
 
 player players[2];     // Cria um array onde os 2 Players ficarão guardados e manipulados.
@@ -25,17 +25,17 @@ void createPlayers(){
         for (int i = 0; i < 2; i++)
         {
             do{
-                printf("Player %d's Nickname:  ",(i + 1));
+                printf("Nome do Jogador %d:  ",(i + 1));
                 gets(players[i].nickname);     
 
-                if(strlen(players[i].nickname) > 12){
-                    printf("Nickname is too long, maximum characters is 12. Please choose a new one! \n");
+                if(strlen(players[i].nickname) > 15){
+                    printf("O nome do jogador é muito grande, máximo são 15. Por favor escolha outro! \n");
                 }
-            }while(strlen(players[i].nickname) > 12);
+            }while(strlen(players[i].nickname) > 15);
         }
         if (!strcmp(players[0].nickname , players[1].nickname))
         {
-            printf("Os Nomes são iguais. por favor escolher ooutro Nome! \n");
+            printf("Os Nomes são iguais. por favor escolha outro nome! \n");
         }
               
     } while (!strcmp(players[0].nickname , players[1].nickname));      
