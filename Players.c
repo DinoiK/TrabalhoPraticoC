@@ -74,46 +74,6 @@ void setWhite(player players[2]){
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                         GAMEPLAY                                                               //
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/* void gameCourse(){
-
-    do
-    {
-        makePlay(players[0]);
-        reCreateTable();
-        makePlay(players[1]);
-        reCreateTable();
-
-         // -----OR----- //
-        makePlayWhite();
-        reCreateTable();
-        makePlayBlack();
-        reCreateTable();
-
-    } while (!gameEnded());
-    
-}
-
-void makePlay(player player){
-
-    //POINT A -----> ALLOW PLAYER TO CHOOSE AN X AND Y COORDENATE TO MOVE A PIECE 
-
-    //POINT B -----> SHOW PLAYER THE POSSIBLE POSITION WHERE THE PIECE CAN GO  
-
-    //POINT C -----> TAKE PLAYER INPUT ABOUT WHERE TO MOVE THE PIECE OR ALLOW HIM TO GO BACK TO POINT A
-
-    //POINT D -----> ASK FOR COMFIRMATION ABOUT THE MOVE OR GO BACK TO POINT C
-
-    //POINT E -----> FINALIZE MOVE AND UPDATE TABLE (INSIDE OR OUTSIDE THIS FUNCTION TBD) AND LEAVE FUNCTION
-}
-
-
-
-
- */
 
 
 
@@ -149,57 +109,5 @@ void makePlay(player player){
 
 
 
-
-
-
-
-
-
-//_________________TEST____________________//
-
-
-
-//char player [2] [12];
-/* void createPlayers(){
-  
-     do
-    {
-        for (int i = 0; i < 2; i++)
-        {
-            printf("Player %d's Nickname ",(i + 1));
-            scanf("%s",&player[i]);     
-        }
-        if (!strcmp(player[0] , player[1]))
-        {
-            printf("Players Nicknames can't be the same. Please choose new ones! \n");
-        }
-              
-    } while (!strcmp(player[0] , player[1]));       
-} */
-
- 
-
-/* void setWhite(char player[] ){
-
-    srand(time(0));
-    int random = rand()%2;
-    char temp[2];
-
-    if(random = 1){
-       
-       // player[0] becomes player[1] and vice versa -----> player[0] always starts, but which one it is is random
-        temp[0] = player[1];
-        temp[1] = player[0];
-        for (int i = 0; i < 2; i++)
-        {
-            player[i] = temp[i];
-        }   
-        printf("%s",player[0]);
-        printf(" is White and will start the game");       
-    }
-    
-
-    
-} */
 
   
