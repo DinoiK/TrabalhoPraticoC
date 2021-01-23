@@ -120,7 +120,7 @@ void setWhite(){
         printf(jogadores[0].nickname);
         printf("  é o Branco e irá jogar em primeiro! \n \n ");
         printf(jogadores[1].nickname);
-        printf(" é Preto e irá jogar em segundo! \n \n");       
+        printf(" é Preto e irá em jogar segundo! \n \n");       
     }
     else{ //ELSE ALL REMAINS THE SAME AND INITIAL PLAYER[0] STARTS
         printf(jogadores[0].nickname);
@@ -305,10 +305,10 @@ void movePiece()
     //receive coordinates from the table and verify if exists in the table
     if(turnoBranco == true)
     {
-        printf("<< %s turn >>\n",jogadores[0].nickname);
+        printf("<< turno do %s  >>\n",jogadores[0].nickname);
     }else
     {
-        printf("<< %s turn >>\n",jogadores[1].nickname);
+        printf("<< turno do %s >>\n",jogadores[1].nickname);
     }
         
     while(pecaEscolhida == ' ' && escolha == false)
@@ -317,7 +317,7 @@ void movePiece()
         do
         {
             printf("Selecionas peça\n");
-            printf("linha da peça: ");
+            printf("Linha da peça: ");
             scanf("%d",&posX);
             if(posX <= 0 || posX > 8)//if the choice is outside of the table, teel the player that he is out of bounds
             {
@@ -378,7 +378,7 @@ void movePiece()
         }
         
         do{
-            printf("Selecionou a peça %c(%d,%c)\nvocê quer trocar?(Y/N)?",pecaEscolhida,posX,posY);
+            printf("Selecionou a peça %c(%d,%c)\nVocê quer trocar?(Y/N)?",pecaEscolhida,posX,posY);
             scanf(" %c",&resposta);
             resposta = toupper(resposta);
             if(resposta == 'Y')
@@ -1327,6 +1327,4 @@ void movePiece()
         reCreateTable();
         turnoBranco = !turnoBranco;    
 }    
-
-
     
