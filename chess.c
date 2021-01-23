@@ -104,7 +104,7 @@ void checkGame()
 void setWhite(){
 
     srand(time(NULL));
-    int random = rand();       //Gera valores aleaotÛrios -> If pair Player[0] stays player 0 ----> ELSE Player[0] becomes player[1]
+    int random = rand();       //Gera valores aleaot√≥rios -> If pair Player[0] stays player 0 ----> ELSE Player[0] becomes player[1]
     player temp[2];            //USER DOESN'T SEE THIS CHANGE HAPPENING, IT JUST ORGANIZES PLAYER ORDER
 
     if(random % 2 == 1){
@@ -118,15 +118,15 @@ void setWhite(){
         }   
         printf("\n ");
         printf(jogadores[0].nickname);
-        printf("  È o Branco e ir· em primeiro! \n \n ");
+        printf("  √© o Branco e ir√° jogar em primeiro! \n \n ");
         printf(jogadores[1].nickname);
-        printf(" È Preto e ir· em segundo! \n \n");       
+        printf(" √© Preto e ir√° jogar em segundo! \n \n");       
     }
     else{ //ELSE ALL REMAINS THE SAME AND INITIAL PLAYER[0] STARTS
         printf(jogadores[0].nickname);
-        printf("  È o Branco e ir· em primeiro \n \n ");
+        printf("  √© o Branco e ir√° jogar em primeiro \n \n ");
         printf(jogadores[1].nickname);
-        printf(" È Preto e ir· em segundo! \n \n");  
+        printf(" √© Preto e ir√° jogar em segundo! \n \n");  
     }
 }
 
@@ -134,8 +134,8 @@ void criarTabuleiro()
 {
     srand(time(0));
     random = rand()%2;
-    //gera um tabuleiro aleatorio de peÁas brancas e pretas.
-    //com letras maÌsuculas e min˙sculas, respectivamente 
+    //gera um tabuleiro aleatorio de pe√ßas brancas e pretas.
+    //com letras ma√≠suculas e min√∫sculas, respectivamente 
     // piece pieces1[16];
     // piece pieces2[16];
     char pecas[9] = {'p','r','n','b','q','k','b','n','r'};
@@ -316,23 +316,23 @@ void movePiece()
         //choose a line form the table
         do
         {
-            printf("Selecionas peÁa\n");
-            printf("linha da peÁa: ");
+            printf("Selecionas pe√ßa\n");
+            printf("linha da pe√ßa: ");
             scanf("%d",&posX);
             if(posX <= 0 || posX > 8)//if the choice is outside of the table, teel the player that he is out of bounds
             {
-                printf("Fora do tabuleiro\nEscreva um n˙mero v·lido dentro do tabuleiro!\n");
+                printf("Fora do tabuleiro\nEscreva um n√∫mero v√°lido dentro do tabuleiro!\n");
             }
         }while(posX <= 0 || posX > 8);
 
         do
         {
-            printf("Coluna da peÁa: ");
+            printf("Coluna da pe√ßa: ");
             scanf(" %c",&posY);
             posY = toupper(posY);
             if(posY < 'A' || posY > 'H')//if the choice is outside of the table, teel the player that he is out of bounds
             {
-                printf("Fora do tabuleiro\nEscreva uma coluna v·lida dentro do tabuleiro!\n\n");
+                printf("Fora do tabuleiro\nEscreva uma coluna v√°lida dentro do tabuleiro!\n\n");
             }
         }while(posY < 'A' || posY > 'H');
         
@@ -356,21 +356,21 @@ void movePiece()
         }
         if(pecaEscolhida == ' ')//if player selects a blank space
         {
-            printf("EspaÁo em branco, escolha um espaÁo v·lido");
+            printf("Espa√ßo em branco, escolha um espa√ßo v√°lido");
             pecaEscolhida = ' ';
             posX = 0;
             posY=0;
             continue;
         }else if(turnoBranco == true && pecaEscolhida != toupper(pecaEscolhida))//if player selects a piece form the opponent
         {
-            printf("PeÁa do oponete escolhida! Escolha uma peÁa sua!\n");
+            printf("Pe√ßa do oponete escolhida! Escolha uma pe√ßa sua!\n");
             pecaEscolhida = ' ';
             posX = 0;
             posY=0;
             continue;
         }else if(turnoBranco == false && pecaEscolhida == toupper(pecaEscolhida))//if player selects a piece form the opponent
         {
-            printf("PeÁa do oponete escolhida! Escolha uma peÁa sua!\n");
+            printf("Pe√ßa do oponete escolhida! Escolha uma pe√ßa sua!\n");
             pecaEscolhida = ' ';
             posX = 0;
             posY=0;
@@ -378,7 +378,7 @@ void movePiece()
         }
         
         do{
-            printf("Selecionou a peÁa %c(%d,%c)\nvocÍ quer trocar?(Y/N)?",pecaEscolhida,posX,posY);
+            printf("Selecionou a pe√ßa %c(%d,%c)\nvoc√™ quer trocar?(Y/N)?",pecaEscolhida,posX,posY);
             scanf(" %c",&resposta);
             resposta = toupper(resposta);
             if(resposta == 'Y')
@@ -416,7 +416,7 @@ void movePiece()
             }
         }                
     }
-    printf("peÁa selecionada È (%d) %c(%d,%c)\n",index,pecaSelecionada.costume,pecaSelecionada.posX,pecaSelecionada.posY);
+    printf("Pe√ßa selecionada √© (%d) %c(%d,%c)\n",index,pecaSelecionada.costume,pecaSelecionada.posX,pecaSelecionada.posY);
     
     //show possible coordinates
     posX = 0;//select new line to move
@@ -655,7 +655,7 @@ void movePiece()
 
                     if(checkPosX == false)//if the choice is outside of the table, teel the player that he is out of bounds
                     {
-                        printf("Linha n„o disponÌvel para o movimento!\n");
+                        printf("Linha n√£o dispon√≠vel para o movimento!\n");
                     }
                 }while(checkPosX == false);
 
@@ -684,7 +684,7 @@ void movePiece()
                     } 
                     if(checkPosY == false)//if the choice is outside of the table, teel the player that he is out of bounds
                     {
-                        printf("Colona n„o dispoÌvel para movimento!\n");
+                        printf("Colona n√£o dispo√≠vel para movimento!\n");
                     }
                 }while(checkPosY == false);
 
@@ -964,7 +964,7 @@ void movePiece()
                     }
                     if(checkPosX == false)
                     {
-                        printf("Linha n„o disponivel para movimento\n");
+                        printf("Linha n√£o disponivel para movimento\n");
                     }
                     
                 } while (checkPosX == false);
@@ -984,7 +984,7 @@ void movePiece()
                     }
                     if(checkPosY == false)
                     {
-                        printf("Coluna n„o disponivel para movimento\n");
+                        printf("Coluna n√£o disponivel para movimento\n");
                     }
                     
                 } while (checkPosY == false);
@@ -1102,7 +1102,7 @@ void movePiece()
                     }
                     if(checkPosX == false)
                     {
-                        printf("Linha n„o dispoÌvel para movimento!");
+                        printf("Linha n√£o dispo√≠vel para movimento!");
                     }
 
                 } while (checkPosX == false);
@@ -1125,7 +1125,7 @@ void movePiece()
                     }
                     if(checkPosY == false)
                     {
-                        printf("Coluna n„o dispoÌvel para o movimento!");
+                        printf("Coluna n√£o dispo√≠vel para o movimento!");
                     }
                 } while (checkPosY == false);
 
@@ -1166,11 +1166,11 @@ void movePiece()
         }
         else if(pecaSelecionada.costume == 'q' || pecaSelecionada.costume == 'Q')//movimento da Rainha
         {
-            //-> em todas as direÁıes o quanto quiseres
+            //-> em todas as dire√ß√µes o quanto quiseres
         }
         else if(pecaSelecionada.costume == 'k' || pecaSelecionada.costume == 'K')//Movimento do Rei
         {
-            //-> em todas as direÁıes apenas um tile.
+            //-> em todas as dire√ß√µes apenas um tile.
             int posicoesDisponiveis[8][2] = {0};
             bool checkPosX = false;
             bool checkPosY = false;
@@ -1266,7 +1266,7 @@ void movePiece()
                     }
                     if(checkPosX == false)
                     {
-                        printf("Linha n„o disponivel para movimento\n");
+                        printf("Linha n√£o disponivel para movimento\n");
                     }
 
                 } while (checkPosX == false);
@@ -1289,7 +1289,7 @@ void movePiece()
                     }
                     if(checkPosY == false)
                     {
-                        printf("Coluna n„o disponivel para movimento\n");
+                        printf("Coluna n√£o disponivel para movimento\n");
                     }
                 } while (checkPosY == false);
 
